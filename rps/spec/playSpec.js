@@ -1,18 +1,41 @@
-function play(p1Throw, p2Throw, ui){
-    if(!["rock", "paper", "scissors"].includes(p1Throw) || !["rock", "paper", "scissors"].includes(p2Throw)) {
-        ui.invalid()
-    }else
-    if(p1Throw == p2Throw) {
-        ui.tie()
-    } else
-    if( (p1Throw == "rock" && p2Throw == "scissors" ) ||
-        (p1Throw == "scissors" && p2Throw == "paper") ||
-        (p1Throw == "paper" && p2Throw == "rock"))   {
-        ui.p1_wins()
+
+function Requests(){
+     this.play = function(p1Throw, p2Throw, ui){
+       new PlayRoundRequest(p1Throw, p2Throw, ui).process()
     }
-    else {
-        ui.p2_wins()
+}
+
+function PlayRoundRequest(p1Throw, p2Throw, ui){
+    this.process = function(){
+        if(this.invalidInput(p1Throw) || this.invalidInput(p2Throw)) {
+            ui.invalid()
+        }else if(this.isTie()) {
+            ui.tie()
+        } else if(this.p1Wins())   {
+            ui.p1_wins()
+        } else {
+            ui.p2_wins()
+        }
     }
+
+    this.isTie = function() {
+        return p1Throw == p2Throw;
+    }
+
+    this.p1Wins = function() {
+        return (p1Throw == ROCK && p2Throw == SCISSORS) ||
+            (p1Throw == SCISSORS && p2Throw == PAPER) ||
+            (p1Throw == PAPER && p2Throw == ROCK);
+    }
+
+    this.invalidInput = function(input) {
+        return !validInputs.includes(input);
+    }
+
+    const ROCK = "rock"
+    const SCISSORS = "scissors"
+    const PAPER = "paper"
+    const validInputs = [ROCK, PAPER, SCISSORS];
 }
 
 describe("rps", function () {
@@ -105,6 +128,10 @@ describe("rps", function () {
             expect(uiSpy.invalid).toHaveBeenCalled()
         });
     });
+
+    function play(p1, p2, ui){
+        new Requests().play(p1, p2, ui)
+    }
 
 });
 
