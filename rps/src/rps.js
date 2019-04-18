@@ -27,14 +27,14 @@ function PlayRoundRequest(player1Throw, player2Throw, ui){
             (player1Throw == PAPER && player2Throw == ROCK);
     }
 
-    this.invalidThrow = function(input) {
-        return !validInputs.includes(input);
+    this.invalidThrow = function(aThrow) {
+        return !validThrows.includes(aThrow);
     }
 
     const ROCK = "rock"
     const SCISSORS = "scissors"
     const PAPER = "paper"
-    const validInputs = [ROCK, PAPER, SCISSORS];
+    const validThrows = [ROCK, PAPER, SCISSORS];
 }
 
 module.exports = {
