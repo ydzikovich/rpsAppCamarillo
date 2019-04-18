@@ -52,7 +52,7 @@ describe("PlayForm", function () {
     describe("when the rps module determines that the input is invalid", function () {
         it('displays Invalid', function () {
             let requests = {
-                play: function(p1Throw, p2Throw, ui) {ui.invalid()}
+                playRound: function(p1Throw, p2Throw, ui) {ui.invalid()}
             }
 
             renderPlayForm(requests);
@@ -66,7 +66,7 @@ describe("PlayForm", function () {
     describe("when the rps module determines a tie", function () {
         it('displays Tie', function () {
             let requests = {
-                play: function(p1Throw, p2Throw, ui) {ui.tie()}
+                playRound: function(p1Throw, p2Throw, ui) {ui.tie()}
             }
 
             renderPlayForm(requests)
@@ -80,7 +80,7 @@ describe("PlayForm", function () {
     describe("when the rps module determines that player 1 wins", function () {
         it('displays Player 1 Wins', function () {
             let requests = {
-                play: function (p1Throw, p2Throw, ui) {
+                playRound: function (p1Throw, p2Throw, ui) {
                     ui.p1_wins()
                 }
             }
@@ -96,7 +96,7 @@ describe("PlayForm", function () {
     describe("when the rps module determines that player 2 wins", function () {
         it('displays Player 2 Wins', function () {
             let requests = {
-                play: function(p1Throw, p2Throw, ui) {ui.p2_wins()}
+                playRound: function(p1Throw, p2Throw, ui) {ui.p2_wins()}
             }
 
             renderPlayForm(requests)
