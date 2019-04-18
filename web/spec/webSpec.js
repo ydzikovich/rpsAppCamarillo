@@ -4,42 +4,7 @@ const ReactTestUtils = require("react-dom/test-utils")
 
 // React cheat sheet https://gist.github.com/moonmaster9000/941b619d6b25cc740aad5f7e926a5150
 
-class PlayForm extends React.Component {
-    constructor(){
-        super()
-        this.state = {message: ""}
-    }
-
-    handlePlay(){
-        this.props.requests.playRound("input 1 placeholder", "input 2 placeholder", this)
-    }
-
-    tie(){
-        this.setState({message: "Tie"})
-    }
-
-    invalid(){
-        this.setState({message: "Invalid"})
-    }
-
-    p1_wins(){
-        this.setState({message: "Player 1 wins!"})
-    }
-
-    p2_wins(){
-        this.setState({message: "Player 2 wins!"})
-    }
-
-    render(){
-        return (
-            <div>
-                <div>{this.state.message}</div>
-                <input type="text" name="p1Throw"/>
-                <button onClick={this.handlePlay.bind(this)}>Submit</button>
-            </div>
-        )
-    }
-}
+const PlayForm = require("./../src/PlayForm")
 
 describe("PlayForm", function () {
     beforeEach(function(){
@@ -59,18 +24,11 @@ describe("PlayForm", function () {
 
             renderPlayForm(requests);
 
-            // fill rock
-            let input = domFixture.querySelector("[name='p1Throw']")
-            input.value = "rock"
-            ReactTestUtils.Simulate.change(input)
+            fillIn("p1Throw", "rock")
+            fillIn("p2Throw", "sailboat")
 
-            // fill in sailboat
-
-
-            // click button
             submitForm();
 
-            // check that spy got the right stuff
             expect(playRoundSpy).toHaveBeenCalledWith("rock", "sailboat", jasmine.any(Object))
         });
 
@@ -156,6 +114,12 @@ describe("PlayForm", function () {
 
     function submitForm() {
         document.querySelector("button").click()
+    }
+
+    function fillIn(inputName, value) {
+        let input = domFixture.querySelector(`[name='${inputName}']`)
+        input.value = value
+        ReactTestUtils.Simulate.change(input)
     }
 })
 
