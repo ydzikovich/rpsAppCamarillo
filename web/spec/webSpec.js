@@ -11,6 +11,14 @@ class PlayForm extends React.Component {
     }
 
     handlePlay(){
+        this.props.requests.play("input 1 placeholder", "input 2 placeholder", this)
+    }
+
+    tie(){
+        this.setState({message: "Tie"})
+    }
+
+    invalid(){
         this.setState({message: "Invalid"})
     }
 
@@ -23,12 +31,18 @@ class PlayForm extends React.Component {
 }
 
 describe("play form", function () {
+    let domFixture
+    beforeEach(() => {
+        domFixture = document.createElement("div")
+        domFixture.id = "hello"
+        document.querySelector("body").appendChild(domFixture)
+    })
+    afterEach(() => {
+        domFixture.remove()
+    })
+
     describe("when rps module tells the UI that the result is tie", function () {
         it("tells the user that it's a tie", function () {
-            let domFixture = document.createElement("div")
-            domFixture.id = "hello"
-            document.querySelector("body").appendChild(domFixture)
-
             const requests = {
                 play: function(p1, p2, ui){
                     ui.tie()
@@ -41,21 +55,15 @@ describe("play form", function () {
         )
 
             expect(domFixture.innerText).not.toContain("Tie")
-            expect(domFixture.innerText).not.toContain("Invalid")
 
             document.querySelector("button").click()
 
             expect(domFixture.innerText).toContain("Tie")
-            expect(domFixture.innerText).not.toContain("Invalid")
         })
     })
 
     describe("when rps module tells the UI that the input is invalid", function () {
         it("tells the user that their input is invalid", function () {
-            let domFixture = document.createElement("div")
-            domFixture.id = "hello"
-            document.querySelector("body").appendChild(domFixture)
-
             const requests = {
                 play: function(p1, p2, ui){
                     ui.invalid()
