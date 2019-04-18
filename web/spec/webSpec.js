@@ -22,71 +22,115 @@ class PlayForm extends React.Component {
         this.setState({message: "Invalid"})
     }
 
+    p1_wins(){
+        this.setState({message: "Player 1 wins!"})
+    }
+
+    p2_wins(){
+        this.setState({message: "Player 2 wins!"})
+    }
+
     render(){
-        return <div>
-            <div>{this.state.message}</div>
-            <button onClick={this.handlePlay.bind(this)}>Play</button>
-        </div>
+        return (
+            <div>
+                <div>{this.state.message}</div>
+                <button onClick={this.handlePlay.bind(this)}>Submit</button>
+            </div>
+        )
     }
 }
 
-describe("play form", function () {
-    let domFixture
-    beforeEach(() => {
+describe("PlayForm", function () {
+    beforeEach(function(){
+        setupDOM()
+    })
+
+    afterEach(function(){
+        cleanUpDOM();
+    })
+
+    describe("when the rps module determines that the input is invalid", function () {
+        it('displays Invalid', function () {
+            let requests = {
+                play: function(p1Throw, p2Throw, ui) {ui.invalid()}
+            }
+
+            renderPlayForm(requests);
+
+            expect(page()).not.toContain("Invalid")
+            submitForm();
+            expect(page()).toContain("Invalid")
+        });
+    });
+
+    describe("when the rps module determines a tie", function () {
+        it('displays Tie', function () {
+            let requests = {
+                play: function(p1Throw, p2Throw, ui) {ui.tie()}
+            }
+
+            renderPlayForm(requests)
+
+            expect(page()).not.toContain("Tie")
+            submitForm()
+            expect(page()).toContain("Tie")
+        });
+    });
+
+    describe("when the rps module determines that player 1 wins", function () {
+        it('displays Player 1 Wins', function () {
+            let requests = {
+                play: function (p1Throw, p2Throw, ui) {
+                    ui.p1_wins()
+                }
+            }
+
+            renderPlayForm(requests)
+
+            expect(page()).not.toContain("Player 1")
+            submitForm()
+            expect(page()).toContain("Player 1 wins!")
+        });
+    });
+
+    describe("when the rps module determines that player 2 wins", function () {
+        it('displays Player 2 Wins', function () {
+            let requests = {
+                play: function(p1Throw, p2Throw, ui) {ui.p2_wins()}
+            }
+
+            renderPlayForm(requests)
+
+            expect(page()).not.toContain("Player 2")
+            submitForm()
+            expect(page()).toContain("Player 2 wins!")
+        });
+    });
+
+    let domFixture;
+
+    function setupDOM() {
         domFixture = document.createElement("div")
         domFixture.id = "hello"
-        document.querySelector("body").appendChild(domFixture)
-    })
-    afterEach(() => {
+        document.body.appendChild(domFixture)
+    }
+
+    function cleanUpDOM(){
         domFixture.remove()
-    })
+    }
 
-    describe("when rps module tells the UI that the result is tie", function () {
-        it("tells the user that it's a tie", function () {
-            const requests = {
-                play: function(p1, p2, ui){
-                    ui.tie()
-                }
-            }
+    function renderPlayForm(requests) {
+        ReactDOM.render(<PlayForm requests={requests}></PlayForm>, domFixture)
+    }
 
-            ReactDOM.render(
-            <PlayForm requests={requests}/>,
-            domFixture
-        )
+    function page() {
+        return domFixture.innerText;
+    }
 
-            expect(domFixture.innerText).not.toContain("Tie")
-
-            document.querySelector("button").click()
-
-            expect(domFixture.innerText).toContain("Tie")
-        })
-    })
-
-    describe("when rps module tells the UI that the input is invalid", function () {
-        it("tells the user that their input is invalid", function () {
-            const requests = {
-                play: function(p1, p2, ui){
-                    ui.invalid()
-                }
-            }
-
-            ReactDOM.render(
-                <PlayForm requests={requests}/>,
-                domFixture
-            )
-
-            expect(domFixture.innerText).not.toContain("Invalid")
-
-            document.querySelector("button").click()
-
-            expect(domFixture.innerText).toContain("Invalid")
-        })
-    })
+    function submitForm() {
+        document.querySelector("button").click()
+    }
 })
-
-
-
-
 
 
 
