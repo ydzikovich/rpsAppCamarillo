@@ -11,7 +11,7 @@ class PlayForm extends React.Component {
     }
 
     handlePlay(){
-        this.props.requests.play("input 1 placeholder", "input 2 placeholder", this)
+        this.props.requests.playRound("input 1 placeholder", "input 2 placeholder", this)
     }
 
     tie(){
@@ -34,6 +34,7 @@ class PlayForm extends React.Component {
         return (
             <div>
                 <div>{this.state.message}</div>
+                <input type="text" name="p1Throw"/>
                 <button onClick={this.handlePlay.bind(this)}>Submit</button>
             </div>
         )
@@ -48,6 +49,32 @@ describe("PlayForm", function () {
     afterEach(function(){
         cleanUpDOM();
     })
+
+    describe("when receives the input", function () {
+        it("passes the correct input to the rps module", function () {
+            let playRoundSpy = jasmine.createSpy()
+            let requests = {
+                playRound: playRoundSpy
+            }
+
+            renderPlayForm(requests);
+
+            // fill rock
+            let input = domFixture.querySelector("[name='p1Throw']")
+            input.value = "rock"
+            ReactTestUtils.Simulate.change(input)
+
+            // fill in sailboat
+
+
+            // click button
+            submitForm();
+
+            // check that spy got the right stuff
+            expect(playRoundSpy).toHaveBeenCalledWith("rock", "sailboat", jasmine.any(Object))
+        });
+
+    });
 
     describe("when the rps module determines that the input is invalid", function () {
         it('displays Invalid', function () {
