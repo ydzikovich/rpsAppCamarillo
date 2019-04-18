@@ -1,15 +1,15 @@
 
 function Requests(){
-     this.play = function(p1Throw, p2Throw, ui){
-       new PlayRoundRequest(p1Throw, p2Throw, ui).process()
+     this.playRound = function(playerOne, playerTwo, ui){
+       new PlayRoundRequest(playerOne, playerTwo, ui).process()
     }
 }
 
-function PlayRoundRequest(p1Throw, p2Throw, ui){
+function PlayRoundRequest(p1, p2, ui){
     this.process = function(){
-        if(this.invalidInput(p1Throw) || this.invalidInput(p2Throw)) {
+        if(!this.validShape(p1) || !this.validShape(p2)) {
             ui.invalid()
-        }else if(this.isTie()) {
+        }else if(this.isDraw()) {
             ui.tie()
         } else if(this.p1Wins())   {
             ui.p1_wins()
@@ -18,27 +18,27 @@ function PlayRoundRequest(p1Throw, p2Throw, ui){
         }
     }
 
-    this.isTie = function() {
-        return p1Throw == p2Throw;
+    this.isDraw = function() {
+        return p1 == p2;
     }
 
     this.p1Wins = function() {
-        return (p1Throw == ROCK && p2Throw == SCISSORS) ||
-            (p1Throw == SCISSORS && p2Throw == PAPER) ||
-            (p1Throw == PAPER && p2Throw == ROCK);
+        return (p1 == ROCK && p2 == SCISSORS) ||
+            (p1 == SCISSORS && p2 == PAPER) ||
+            (p1 == PAPER && p2 == ROCK);
     }
 
-    this.invalidInput = function(input) {
-        return !validInputs.includes(input);
+    this.validShape = function(input) {
+        return validShapes.includes(input);
     }
 
     const ROCK = "rock"
     const SCISSORS = "scissors"
     const PAPER = "paper"
-    const validInputs = [ROCK, PAPER, SCISSORS];
+    const validShapes = [ROCK, PAPER, SCISSORS];
 }
 
-describe("rps", function () {
+describe("playRoundSpecs", function () {
     let uiSpy
 
     describe("P1 wins cases", function () {
@@ -130,7 +130,7 @@ describe("rps", function () {
     });
 
     function play(p1, p2, ui){
-        new Requests().play(p1, p2, ui)
+        new Requests().playRound(p1, p2, ui)
     }
 
 });
