@@ -28,13 +28,13 @@ describe("play form", function () {
             }
 
             ReactDOM.render(
-            <RPSApp requests={requests}/>,
+            <PlayForm requests={requests}/>,
             domFixture
         )
 
             document.querySelector("button").click()
 
-            expect(domFixture.innerText).toContain("INVALID")
+            expect(domFixture.innerText).toContain("Invalid")
         })
     })
 })
