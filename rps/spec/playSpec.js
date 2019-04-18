@@ -1,42 +1,4 @@
-
-function Requests(){
-     this.playRound = function(playerOne, playerTwo, ui){
-       new PlayRoundRequest(playerOne, playerTwo, ui).process()
-    }
-}
-
-function PlayRoundRequest(p1, p2, ui){
-    this.process = function(){
-        if(!this.validShape(p1) || !this.validShape(p2)) {
-            ui.invalid()
-        }else if(this.isDraw()) {
-            ui.tie()
-        } else if(this.p1Wins())   {
-            ui.p1_wins()
-        } else {
-            ui.p2_wins()
-        }
-    }
-
-    this.isDraw = function() {
-        return p1 == p2;
-    }
-
-    this.p1Wins = function() {
-        return (p1 == ROCK && p2 == SCISSORS) ||
-            (p1 == SCISSORS && p2 == PAPER) ||
-            (p1 == PAPER && p2 == ROCK);
-    }
-
-    this.validShape = function(input) {
-        return validShapes.includes(input);
-    }
-
-    const ROCK = "rock"
-    const SCISSORS = "scissors"
-    const PAPER = "paper"
-    const validShapes = [ROCK, PAPER, SCISSORS];
-}
+const {Requests} = require("../src/rps")
 
 describe("playRoundSpecs", function () {
     let uiSpy
